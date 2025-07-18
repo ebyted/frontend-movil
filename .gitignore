@@ -1,0 +1,24 @@
+# React Native
+node_modules/
+build/
+android/app/build/
+android/app/.cxx/
+*.log
+*.tmp
+*.lock
+.env
+.vscode/
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+# IDE
+.idea/
+# Test coverage
+coverage/
+# Expo
+.expo/
+.expo-shared/
+# Others
+*.keystore
+*.iml
