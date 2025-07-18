@@ -13,9 +13,26 @@ const menuOptions = [
   { name: "Silencio Sagrado", icon: "🤫", screen: "SilencioSagradoScreen" },
 ];
 
+type SkinKey = keyof typeof SKINS;
+
+type ThemeType = {
+  name: string;
+  background: string;
+  primary: string;
+  accent: string;
+  text: string;
+  card: string;
+  spiritual: string;
+};
+
+type ThemeContextType = {
+  theme: ThemeType;
+  setTheme: (theme: SkinKey) => void;
+};
+
 export default function MainMenuScreen({ navigation }) {
-  const { theme } = useContext(ThemeContext);
-  const currentTheme = SKINS[theme] || SKINS.light;
+  const { theme } = useContext(ThemeContext) as ThemeContextType;
+  const currentTheme = theme ?? SKINS.light;
   
   return (
     <ScrollView style={[styles.container, { backgroundColor: currentTheme.background }]}> 
