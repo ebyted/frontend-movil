@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getRitualProgress, updateRitualProgress } from "../../services/ritual";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const rituals = [
   "Agradecer el día",
@@ -11,15 +13,32 @@ const rituals = [
 ];
 
 export default function RitualDiarioScreen() {
+  const { token } = useContext(AuthContext);
   const [done, setDone] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem("ritual_diario").then(data => {
-      if (data) setDone(JSON.parse(data));
-    });
-  }, []);
+    async function fetchProgress() {
+      setLoading(true);
+      if (token) {
+        try {
+          const res = await getRitualProgress(token);
+          setDone(res.data.progress ?? []);
+        } catch {
+          const data = await AsyncStorage.getItem("ritual_diario");
+          if (data) setDone(JSON.parse(data));
+        }
+      } else {
+        const data = await AsyncStorage.getItem("ritual_diario");
+        if (data) setDone(JSON.parse(data));
+      }
+      setLoading(false);
+    }
+    fetchProgress();
+  }, [token]);
 
-  const toggleRitual = async (ritual) => {
+  const toggleRitual = async (ritual: string) => {
+    setLoading(true);
     let newDone;
     if (done.includes(ritual)) {
       newDone = done.filter(r => r !== ritual);
@@ -27,7 +46,16 @@ export default function RitualDiarioScreen() {
       newDone = [...done, ritual];
     }
     setDone(newDone);
-    await AsyncStorage.setItem("ritual_diario", JSON.stringify(newDone));
+    try {
+      if (token) {
+        await updateRitualProgress(token, newDone);
+      } else {
+        await AsyncStorage.setItem("ritual_diario", JSON.stringify(newDone));
+      }
+    } catch {
+      Alert.alert("Error", "No se pudo guardar el progreso.");
+    }
+    setLoading(false);
   };
 
   return (

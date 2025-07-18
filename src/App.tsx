@@ -8,6 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import SplashScreen from "./screens/Auth/SplashScreen";
+import LoginScreen from "./screens/Auth/LoginScreen";
+import RegisterScreen from "./screens/Auth/RegisterScreen";
+import ForgotPasswordScreen from "./screens/Auth/ForgotPasswordScreen";
+import PreferencesScreen from "./screens/Profile/PreferencesScreen";
+import NotificationsSettingsScreen from "./screens/Notifications/NotificationsSettingsScreen";
+import LogrosScreen from "./screens/Gamification/LogrosScreen";
+import RetosScreen from "./screens/Gamification/RetosScreen";
 import TempleScreen from "./screens/Onboarding/TempleScreen";
 import EmotionScreen from "./screens/Onboarding/EmotionScreen";
 import IntentionScreen from "./screens/Onboarding/IntentionScreen";
@@ -32,6 +39,9 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
             <Stack.Screen name="SplashScreen" component={SplashScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+            <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
             <Stack.Screen name="TempleScreen" component={TempleScreen} />
             <Stack.Screen name="EmotionScreen" component={EmotionScreen} />
             <Stack.Screen name="IntentionScreen" component={IntentionScreen} />
@@ -46,6 +56,10 @@ export default function App() {
             <Stack.Screen name="RitualDiarioScreen" component={RitualDiarioScreen} />
             <Stack.Screen name="MapaInteriorScreen" component={MapaInteriorScreen} />
             <Stack.Screen name="SilencioSagradoScreen" component={SilencioSagradoScreen} />
+            <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
+            <Stack.Screen name="NotificationsSettingsScreen" component={NotificationsSettingsScreen} />
+            <Stack.Screen name="LogrosScreen" component={LogrosScreen} />
+            <Stack.Screen name="RetosScreen" component={RetosScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>
