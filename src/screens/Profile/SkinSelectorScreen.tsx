@@ -4,7 +4,8 @@ import { ThemeContext } from "../../contexts/ThemeContext";
 import { SKINS } from "../../utils/theme";
 
 export default function SkinSelectorScreen() {
-  const { skin, setSkin, theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
+  const [skin, setSkin] = React.useState<string>(Object.keys(SKINS)[0]);
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}> 
       <Text style={[styles.title, { color: theme.primary }]}>Elige tu skin espiritual</Text>

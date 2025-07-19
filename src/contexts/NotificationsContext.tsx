@@ -1,5 +1,6 @@
 
 import React, { createContext, useState, useEffect, Dispatch, SetStateAction } from "react";
+import axios from "axios";
 
 type Notification = {
   id: string;
@@ -32,23 +33,31 @@ export const NotificationsProvider = ({ children }: { children: React.ReactNode 
   const [deviceToken, setDeviceToken] = useState<string>("");
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // Placeholder: register device token with backend when endpoint is ready
+  // Register device token with backend
   const registerDeviceToken = async (token: string) => {
     setDeviceToken(token);
-    // TODO: Replace with POST /profile/device-token when backend is ready
-    // await axios.post("/profile/device-token", { token });
+    try {
+      await axios.post("/profile/device-token", { token });
+    } catch (error) {
+      // Optionally handle error (e.g., show notification)
+      console.error("Error registering device token:", error);
+    }
   };
 
-  // Placeholder: fetch notifications from backend when endpoint is ready
+  // Fetch notifications from backend
   const fetchNotifications = async () => {
-    // TODO: Replace with GET /notifications when backend is ready
-    // const res = await axios.get("/notifications");
-    // setNotifications(res.data);
+    try {
+      const res = await axios.get("/notifications");
+      setNotifications(res.data);
+    } catch (error) {
+      // Optionally handle error (e.g., show notification)
+      console.error("Error fetching notifications:", error);
+    }
   };
 
   useEffect(() => {
-    // Example: fetch notifications on mount (when endpoint is ready)
-    // fetchNotifications();
+    // Fetch notifications on mount
+    fetchNotifications();
   }, []);
 
   return (

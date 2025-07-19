@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { onboardingGenerateWelcome } from "../../services/onboarding";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function WelcomeScreen({ navigation }) {
+  const { theme } = useContext(ThemeContext);
   const [sessionId, setSessionId] = useState("");
   const [welcome, setWelcome] = useState("");
   useEffect(() => {
@@ -21,11 +23,11 @@ export default function WelcomeScreen({ navigation }) {
     navigation.replace("MainMenuScreen");
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>¡Bienvenido!</Text>
-      <Text style={styles.welcome}>{welcome}</Text>
-      <TouchableOpacity style={styles.button} onPress={handleFinish}>
-        <Text style={styles.buttonText}>Ir al menú principal</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>¡Bienvenido!</Text>
+      <Text style={[styles.welcome, { color: theme.text }]}>{welcome}</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.accent }]} onPress={handleFinish}>
+        <Text style={[styles.buttonText, { color: theme.background }]}>Ir al menú principal</Text>
       </TouchableOpacity>
     </View>
   );

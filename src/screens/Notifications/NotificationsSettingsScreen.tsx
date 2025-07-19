@@ -3,8 +3,10 @@ import { View, Text, Switch, TouchableOpacity, StyleSheet } from "react-native";
 import { NotificationsContext } from "../../contexts/NotificationsContext";
 import { registerDeviceToken } from "../../services/notifications";
 import { AuthContext } from "../../contexts/AuthContext";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 export default function NotificationsSettingsScreen() {
+  const { theme } = useContext(ThemeContext);
   const { token } = useContext(AuthContext);
   const { deviceToken, setDeviceToken } = useContext(NotificationsContext);
   const [enabled, setEnabled] = useState(true);
@@ -20,14 +22,14 @@ export default function NotificationsSettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Notificaciones</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>Notificaciones</Text>
       <View style={styles.row}>
-        <Text style={styles.label}>Activar notificaciones</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Activar notificaciones</Text>
         <Switch value={enabled} onValueChange={setEnabled} />
       </View>
-      <TouchableOpacity style={styles.button} onPress={saveSettings} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Guardando..." : "Guardar"}</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.accent }]} onPress={saveSettings} disabled={loading}>
+        <Text style={[styles.buttonText, { color: theme.background }]}>{loading ? "Guardando..." : "Guardar"}</Text>
       </TouchableOpacity>
     </View>
   );

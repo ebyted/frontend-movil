@@ -25,23 +25,16 @@ type ThemeType = {
   spiritual: string;
 };
 
-type ThemeContextType = {
-  theme: ThemeType;
-  setTheme: (theme: SkinKey) => void;
-};
-
 export default function MainMenuScreen({ navigation }) {
-  const { theme } = useContext(ThemeContext) as ThemeContextType;
-  const currentTheme = theme ?? SKINS.light;
-  
+  const { theme } = useContext(ThemeContext);
   return (
-    <ScrollView style={[styles.container, { backgroundColor: currentTheme.background }]}> 
-      <Text style={[styles.title, { color: currentTheme.primary }]}>Bienvenido a tu espacio sagrado</Text>
+    <ScrollView style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>Bienvenido a tu espacio sagrado</Text>
       <View style={styles.menuGrid}>
         {menuOptions.map(opt => (
-          <TouchableOpacity key={opt.name} style={[styles.card, { backgroundColor: currentTheme.card }]} onPress={() => navigation.navigate(opt.screen)}>
+          <TouchableOpacity key={opt.name} style={[styles.card, { backgroundColor: theme.card }]} onPress={() => navigation.navigate(opt.screen)}>
             <Text style={styles.icon}>{opt.icon}</Text>
-            <Text style={[styles.cardText, { color: currentTheme.primary }]}>{opt.name}</Text>
+            <Text style={[styles.cardText, { color: theme.primary }]}>{opt.name}</Text>
           </TouchableOpacity>
         ))}
       </View>

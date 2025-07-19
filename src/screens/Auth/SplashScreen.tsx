@@ -13,11 +13,11 @@ export default function SplashScreen({ navigation }) {
       try {
         const sessionId = await onboardingStart();
         await AsyncStorage.setItem("session_id", sessionId);
-        navigation.replace("TempleScreen");
+        navigation.navigate("Onboarding", { screen: "TempleScreen" });
       } catch (e) {
         setError("No se pudo crear la sesión. Usando modo prueba.");
         await AsyncStorage.setItem("session_id", "test-session-id");
-        navigation.replace("TempleScreen");
+        navigation.navigate("Onboarding", { screen: "TempleScreen" });
       }
     }
     startOnboarding();

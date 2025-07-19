@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { ThemeContext } from "../../contexts/ThemeContext";
 import { onboardingSaveIntention } from "../../services/onboarding";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -8,6 +9,7 @@ const intentions = [
 ];
 
 export default function IntentionScreen({ navigation }) {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sessionId, setSessionId] = useState("");
@@ -25,13 +27,13 @@ export default function IntentionScreen({ navigation }) {
     setLoading(true);
     setError("");
     if (sessionId === "test-session-id") {
-      navigation.replace("PersonalDataScreen");
+      navigation.navigate("PersonalDataScreen");
       setLoading(false);
       return;
     }
     try {
       await onboardingSaveIntention(sessionId, intention);
-      navigation.replace("PersonalDataScreen");
+      navigation.navigate("PersonalDataScreen");
     } catch (e) {
       setError("Error al guardar. Intenta de nuevo.");
     } finally {
@@ -39,18 +41,18 @@ export default function IntentionScreen({ navigation }) {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>¿Cuál es tu intención hoy?</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>¿Cuál es tu intención hoy?</Text>
       {error ? <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text> : null}
       <View style={styles.grid}>
         {intentions.map(e => (
           <TouchableOpacity
             key={e}
-            style={[styles.intentionBtn, { opacity: (!sessionId || loading) ? 0.5 : 1 }]}
+            style={[styles.intentionBtn, { opacity: (!sessionId || loading) ? 0.5 : 1, backgroundColor: theme.card }]}
             onPress={() => handleSelect(e)}
             disabled={!sessionId || loading}
           >
-            <Text style={styles.intentionText}>{e}</Text>
+            <Text style={[styles.intentionText, { color: theme.primary }]}>{e}</Text>
           </TouchableOpacity>
         ))}
       </View>

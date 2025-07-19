@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { onboardingSaveEmotion } from "../../services/onboarding";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeContext } from "../../contexts/ThemeContext";
 
 const emotions = [
   "En paz", "Ansioso", "Esperanzado", "Confundido", "Alegre", "Melancólico", "Sereno", "Inquieto", "Agradecido", "Nostálgico"
 ];
 
 export default function EmotionScreen({ navigation }) {
+  const { theme } = useContext(ThemeContext);
   const [sessionId, setSessionId] = useState("");
   React.useEffect(() => {
     AsyncStorage.getItem("session_id").then(id => {
@@ -24,12 +26,12 @@ export default function EmotionScreen({ navigation }) {
     navigation.navigate("IntentionScreen");
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>¿Cómo te sientes hoy?</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>¿Cómo te sientes hoy?</Text>
       <View style={styles.grid}>
         {emotions.map(e => (
-          <TouchableOpacity key={e} style={styles.emotionBtn} onPress={() => handleSelect(e)}>
-            <Text style={styles.emotionText}>{e}</Text>
+          <TouchableOpacity key={e} style={[styles.emotionBtn, { backgroundColor: theme.card }]} onPress={() => handleSelect(e)}>
+            <Text style={[styles.emotionText, { color: theme.primary }]}>{e}</Text>
           </TouchableOpacity>
         ))}
       </View>

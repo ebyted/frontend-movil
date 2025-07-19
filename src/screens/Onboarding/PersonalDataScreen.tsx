@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { onboardingSavePersonalData } from "../../services/onboarding";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { ThemeContext } from "../../contexts/ThemeContext";
 export default function PersonalDataScreen({ navigation }) {
+  const { theme } = useContext(ThemeContext);
   const [sessionId, setSessionId] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellidoPaterno, setApellidoPaterno] = useState("");
+  const [apellidoMaterno, setApellidoMaterno] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [birthPlace, setBirthPlace] = useState("");
   const [birthTime, setBirthTime] = useState("");
+  const [error, setError] = useState("");
   React.useEffect(() => {
     AsyncStorage.getItem("session_id").then(id => {
       if (id) setSessionId(id);
@@ -16,22 +20,31 @@ export default function PersonalDataScreen({ navigation }) {
     });
   }, []);
   const handleNext = async () => {
-    if (sessionId === "test-session-id") {
-      navigation.replace("WelcomeScreen");
-      return;
+    setError("");
+    try {
+      if (sessionId === "test-session-id") {
+        navigation.navigate("SkinSelectorOnboarding");
+        return;
+      }
+      const fullName = `${nombre} ${apellidoPaterno} ${apellidoMaterno}`.trim();
+      await onboardingSavePersonalData(sessionId, fullName, birthDate, birthPlace, birthTime);
+      navigation.navigate("SkinSelectorOnboarding");
+    } catch (e) {
+      setError("Ocurrió un error al guardar los datos. Verifica los campos e intenta de nuevo.");
     }
-    await onboardingSavePersonalData(sessionId, fullName, birthDate, birthPlace, birthTime);
-    navigation.replace("WelcomeScreen");
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tus datos personales</Text>
-      <TextInput style={styles.input} value={fullName} onChangeText={setFullName} placeholder="Nombre completo" />
-      <TextInput style={styles.input} value={birthDate} onChangeText={setBirthDate} placeholder="Fecha de nacimiento (YYYY-MM-DD)" />
-      <TextInput style={styles.input} value={birthPlace} onChangeText={setBirthPlace} placeholder="Lugar de nacimiento" />
-      <TextInput style={styles.input} value={birthTime} onChangeText={setBirthTime} placeholder="Hora de nacimiento (HH:MM)" />
-      <TouchableOpacity style={styles.button} onPress={handleNext}>
-        <Text style={styles.buttonText}>Siguiente</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>Tus datos personales</Text>
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={nombre} onChangeText={setNombre} placeholder="Nombre(s)" placeholderTextColor={theme.text} />
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={apellidoPaterno} onChangeText={setApellidoPaterno} placeholder="Apellido paterno" placeholderTextColor={theme.text} />
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={apellidoMaterno} onChangeText={setApellidoMaterno} placeholder="Apellido materno" placeholderTextColor={theme.text} />
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={birthDate} onChangeText={setBirthDate} placeholder="Fecha de nacimiento (YYYY-MM-DD)" placeholderTextColor={theme.text} />
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={birthPlace} onChangeText={setBirthPlace} placeholder="Lugar de nacimiento" placeholderTextColor={theme.text} />
+      <TextInput style={[styles.input, { backgroundColor: theme.card, color: theme.text }]} value={birthTime} onChangeText={setBirthTime} placeholder="Hora de nacimiento (HH:MM)" placeholderTextColor={theme.text} />
+      {error ? <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text> : null}
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.accent }]} onPress={handleNext}>
+        <Text style={[styles.buttonText, { color: theme.background }]}>Siguiente</Text>
       </TouchableOpacity>
     </View>
   );

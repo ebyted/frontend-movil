@@ -35,18 +35,18 @@ export default function PreferencesScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Preferencias</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}> 
+      <Text style={[styles.title, { color: theme.primary }]}>Preferencias</Text>
       <View style={styles.row}>
-        <Text style={styles.label}>Modo oscuro</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Modo oscuro</Text>
         <Switch value={darkMode} onValueChange={setDarkMode} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Sonido</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Sonido</Text>
         <Switch value={soundOn} onValueChange={setSoundOn} />
       </View>
-      <TouchableOpacity style={styles.button} onPress={savePrefs} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? "Guardando..." : "Guardar"}</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.accent }]} onPress={savePrefs} disabled={loading}>
+        <Text style={[styles.buttonText, { color: theme.background }]}>{loading ? "Guardando..." : "Guardar"}</Text>
       </TouchableOpacity>
     </View>
   );
